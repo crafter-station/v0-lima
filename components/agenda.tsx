@@ -36,32 +36,38 @@ export default function Agenda() {
                     >
                         <div className="pb-6">
                             <div className="font-medium space-x-2">
-                                <span className='text-muted-foreground font-mono '>11:00</span>
-                                <span>Welcome Video</span>
+                                <span className='text-muted-foreground font-mono '>09:30</span>
+                                <span>Doors open & check-in</span>
                             </div>
-                            <p className="text-muted-foreground mt-4">A special welcome from the v0 Team</p>
+                            <p className="text-muted-foreground mt-4">Arrive at UTEC Ventures, Barranco. Get settled and meet other builders.</p>
                         </div>
                         <div className="py-6">
                             <div className="font-medium space-x-2">
-                                <span className='text-muted-foreground font-mono '>11:30</span>
-                                <span>Build Time!</span>
+                                <span className='text-muted-foreground font-mono '>10:00</span>
+                                <span>Quick kickoff & framing</span>
                             </div>
-                            <p className="text-muted-foreground mt-4">Hands on to build your project with v0.</p>
+                            <p className="text-muted-foreground mt-4">Welcome, event rules, and inspiration tracks overview.</p>
                         </div>
                         <div className="py-6">
                             <div className="font-medium space-x-2">
-                                <span className='text-muted-foreground font-mono '>13:00</span>
-                                <span>Showcase Sprint</span>
+                                <span className='text-muted-foreground font-mono '>10:15</span>
+                                <span>Build session</span>
                             </div>
-                            <p className="text-muted-foreground mt-4">Show a quick presentation of what you built.</p>
+                            <p className="text-muted-foreground mt-4">Hands-on building with v0. Work solo or in a small team.</p>
                         </div>
                         <div className="py-6">
                             <div className="font-medium space-x-2">
-                                <span className='text-muted-foreground font-mono '>13:30</span>
-                                <span>Networking and Event Close</span>
+                                <span className='text-muted-foreground font-mono '>12:00</span>
+                                <span>Deploy, submit & demos</span>
                             </div>
-                            <p className="text-muted-foreground mt-4">Take some time to interact with other and share
-                                ideas.</p>
+                            <p className="text-muted-foreground mt-4">Deploy your project, submit to the global showcase, and optional short demos.</p>
+                        </div>
+                        <div className="py-6">
+                            <div className="font-medium space-x-2">
+                                <span className='text-muted-foreground font-mono '>12:30</span>
+                                <span>Wrap up</span>
+                            </div>
+                            <p className="text-muted-foreground mt-4">Networking, photo time, and event close.</p>
                         </div>
                     </AnimatedGroup>
                 </div>

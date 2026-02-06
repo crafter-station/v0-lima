@@ -7,7 +7,7 @@ import {TextEffect} from "@/components/motion-primitives/text-effect";
 import {AnimatedGroup} from "@/components/motion-primitives/animated-group";
 import V0Icon from "@/components/icons/v0-icon";
 import VercelWordmarkIcon from "@/components/icons/vercel-wordmark-icon";
-import GlobantLogoIcon from "@/components/icons/globant-logo-icon";
+import CrafterStationIcon from "@/components/icons/crafter-station-icon";
 import DecryptedText from "@/components/DecryptedText";
 import {transitionVariants} from "@/lib/utils";
 import LanyardWithControls from "@/components/lanyard-with-controls";
@@ -22,7 +22,7 @@ export default function HeroSection() {
                         <div className="mx-auto max-w-2xl text-center lg:ml-0 lg:text-left">
                             <div className='mt-8 lg:mt-16'>
                                 <DecryptedText
-                                    text="Thursday February 5th, 2026 - New York City"
+                                    text="Saturday February 7th, 2026 - Lima, Peru"
                                     animateOn="view"
                                     revealDirection="start"
                                     sequential
@@ -52,8 +52,7 @@ export default function HeroSection() {
                                 delay={0.5}
                                 as="p"
                                 className="mt-8 max-w-2xl text-pretty text-lg text-muted-foreground bg-black p-1 rounded-md">
-                                v0 is getting ready to launch its biggest product update yet. We're celebrating with
-                                v0 IRLs around the world.
+                                As part of v0 Prompt to Production Week, Crafter Station hosts a build session in Lima. Ship real apps and agents using the latest v0 updates.
                             </TextEffect>
                             <AnimatedGroup
                                 variants={{
@@ -73,8 +72,8 @@ export default function HeroSection() {
                                     asChild
                                     size="lg"
                                     className="px-5 text-base">
-                                    <Link href="#link">
-                                        <span className="text-nowrap">Register Now</span>
+                                    <Link href="/submit">
+                                        <span className="text-nowrap">Submit your build</span>
                                     </Link>
                                 </Button>
                                 <Button
@@ -83,8 +82,8 @@ export default function HeroSection() {
                                     size="lg"
                                     variant="ghost"
                                     className="px-5 text-base bg-black/30 backdrop-blur-sm hover:bg-black/40">
-                                    <Link href="#link">
-                                        <span className="text-nowrap">Contact Host</span>
+                                    <Link href="/browse">
+                                        <span className="text-nowrap">Browse & vote</span>
                                     </Link>
                                 </Button>
                             </AnimatedGroup>
@@ -114,7 +113,7 @@ export default function HeroSection() {
 
                     <div className="flex flex-col items-center md:flex-row">
                         <div className="md:max-w-44 md:border-r md:pr-6">
-                            <p className="text-end text-sm font-mono uppercase">Supported by</p>
+                            <p className="text-end text-sm font-mono uppercase">Hosted by</p>
                         </div>
                         <div className="relative py-6 md:w-[calc(100%-11rem)]">
                             <InfiniteSlider
@@ -129,7 +128,7 @@ export default function HeroSection() {
                                                         className='text-foreground mx-auto'/>
                                 </div>
                                 <div className="flex items-center">
-                                    <GlobantLogoIcon size={20} aria-label="Globant Logo"
+                                    <CrafterStationIcon size={20} aria-label="Crafter Station Logo"
                                                      className='text-foreground mx-auto'/>
                                 </div>
                             </InfiniteSlider>

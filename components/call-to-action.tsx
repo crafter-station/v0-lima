@@ -15,7 +15,7 @@ export default function CallToAction() {
                         speedSegment={0.3}
                         as="h2"
                         className="text-balance text-4xl font-semibold lg:text-5xl">
-                        Don't miss a spot!
+                        Ready to ship?
                     </TextEffect>
                     <TextEffect
                         triggerOnView
@@ -24,7 +24,7 @@ export default function CallToAction() {
                         delay={0.3}
                         as="p"
                         className="mt-4 text-muted-foreground">
-                        We have limited availability, register now in the link below.
+                        Build something real with v0 and compete for prizes. One session, real apps, real work.
                     </TextEffect>
                     <AnimatedGroup
                         triggerOnView
@@ -44,8 +44,8 @@ export default function CallToAction() {
                         <Button
                             asChild
                             size="lg">
-                            <Link href="#">
-                                <span>Register</span>
+                            <Link href="/submit">
+                                <span>Submit your build</span>
                             </Link>
                         </Button>
 
@@ -53,8 +53,8 @@ export default function CallToAction() {
                             asChild
                             size="lg"
                             variant="outline">
-                            <Link href="#">
-                                <span>Contact the Host</span>
+                            <Link href="https://lu.ma/vtg473h3" target="_blank" rel="noopener noreferrer">
+                                <span>Join waitlist</span>
                             </Link>
                         </Button>
                     </AnimatedGroup>

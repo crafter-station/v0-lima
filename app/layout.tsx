@@ -11,8 +11,8 @@ const _geist = Geist({subsets: ["latin"]});
 const _geistMono = Geist_Mono({subsets: ["latin"]});
 
 export const metadata: Metadata = {
-    title: 'v0 IRL — Prompt to Production | NYC February 5th, 2026',
-    description: 'v0 is launching its biggest product update yet. Join us for v0 IRL events around the world. One week. Global hackathons. Real apps, real work.',
+    title: 'v0 Prompt to Production - Lima | Saturday February 7th, 2026',
+    description: 'Local build session hosted by Crafter Station as part of v0 Prompt to Production Week. Ship real apps and agents using the latest v0 updates.',
     generator: 'v0.app',
     icons: {
         icon: [

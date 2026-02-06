@@ -4,16 +4,16 @@ import React from "react";
 
 const links = [
     {
-        title: 'Vercel',
-        href: 'https://vercel.com/',
+        title: 'Crafter Station',
+        href: 'https://crafterstation.com/',
     },
     {
         title: 'v0',
         href: 'https://v0.dev/',
     },
     {
-        title: 'Meetup SDK',
-        href: 'https://meetup-sdk.vercel.com/',
+        title: 'Luma Event',
+        href: 'https://lu.ma/vtg473h3',
     },
     {
         title: 'v0 IRL',
@@ -42,11 +42,11 @@ export default function FooterSection() {
                         </Link>
                     ))}
                 </div>
-                <span className="text-muted-foreground block text-center text-sm font-mono">Built with v0, <Link
-                    href="https://tailark.com/"
-                    className="text-foreground underline">Tailark</Link> & <Link
-                    href="https://reactbits.dev/"
-                    className="text-foreground underline">React Bits</Link> • Powered by Vercel.</span>
+                <span className="text-muted-foreground block text-center text-sm font-mono">Hosted by <Link
+                    href="https://crafterstation.com/"
+                    className="text-foreground underline">Crafter Station</Link> • Powered by <Link
+                    href="https://vercel.com/"
+                    className="text-foreground underline">Vercel</Link></span>
             </div>
         </footer>
     )

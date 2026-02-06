@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Simple obfuscation for usernames in URLs (base64 with UTF-8 support for emojis)
-const OBFUSCATION_KEY = "v0gdl";
+const OBFUSCATION_KEY = "v0lima";
 
 // Helper to convert UTF-8 string to base64 (supports Unicode/emojis)
 function utf8ToBase64(str: string): string {

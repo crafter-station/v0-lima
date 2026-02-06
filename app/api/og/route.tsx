@@ -4,7 +4,7 @@ import { ImageResponse } from "next/og";
 function decryptLanyardData(
   encrypted: string
 ): { username: string; variant: "dark" | "light" } | null {
-  const OBFUSCATION_KEY = "v0gdl";
+  const OBFUSCATION_KEY = "v0lima";
 
   if (!encrypted) return null;
   try {
@@ -54,8 +54,8 @@ export async function GET(request: Request) {
   try {
 
       // Event details - you can edit these
-      const EVENT_CITY = "guadalajara";
-      const EVENT_DATE = "jueves 5 de febrero";
+      const EVENT_CITY = "lima";
+      const EVENT_DATE = "sabado 7 de febrero";
       const TITLE = 'Prompt to Production'
 
     const { searchParams } = new URL(request.url);

@@ -1,5 +1,5 @@
 import {Card, CardContent, CardHeader} from '@/components/ui/card'
-import {CircleDollarSignIcon, EarthIcon, UsersIcon} from 'lucide-react'
+import {RocketIcon, EarthIcon, VoteIcon} from 'lucide-react'
 import React, {ReactNode} from 'react'
 import {TextEffect} from "@/components/motion-primitives/text-effect";
 import {transitionVariants} from "@/lib/utils";
@@ -16,7 +16,7 @@ export default function Features() {
                         speedSegment={0.3}
                         as="h2"
                         className="text-balance text-4xl font-semibold lg:text-5xl">
-                        Join us for NYC's first official v0 IRL event
+                        Build, ship, and compete in Lima
                     </TextEffect>
                 </div>
                 <AnimatedGroup
@@ -38,18 +38,17 @@ export default function Features() {
                         <div className="group shadow-zinc-950/5">
                             <CardHeader className="pb-3">
                                 <CardDecorator>
-                                    <CircleDollarSignIcon
+                                    <RocketIcon
                                         className="size-6"
                                         aria-hidden
                                     />
                                 </CardDecorator>
 
-                                <h3 className="mt-6 font-medium text-xl">Free v0 Credits</h3>
+                                <h3 className="mt-6 font-medium text-xl">Build & Ship</h3>
                             </CardHeader>
 
                             <CardContent>
-                                <p className="text-sm text-muted-foreground">Credits to use towards building with
-                                    v0.</p>
+                                <p className="text-sm text-muted-foreground">Hands-on build session. Take an idea, build it with v0, ship it live.</p>
                             </CardContent>
                         </div>
 
@@ -62,31 +61,28 @@ export default function Features() {
                                     />
                                 </CardDecorator>
 
-                                <h3 className="mt-6 font-medium text-xl">Global Gallery</h3>
+                                <h3 className="mt-6 font-medium text-xl">Global Showcase</h3>
                             </CardHeader>
 
                             <CardContent>
-                                <p className="mt-3 text-sm text-muted-foreground">Every project showcased in a worldwide
-                                    exhibition</p>
+                                <p className="mt-3 text-sm text-muted-foreground">Submit to v0 Community Showcase. Community votes throughout the week.</p>
                             </CardContent>
                         </div>
 
                         <div className="group shadow-zinc-950/5">
                             <CardHeader className="pb-3">
                                 <CardDecorator>
-                                    <UsersIcon
+                                    <VoteIcon
                                         className="size-6"
                                         aria-hidden
                                     />
                                 </CardDecorator>
 
-                                <h3 className="mt-6 font-medium text-xl">Community Voting</h3>
+                                <h3 className="mt-6 font-medium text-xl">Community Vote</h3>
                             </CardHeader>
 
                             <CardContent>
-                                <p className="mt-3 text-sm text-muted-foreground">Builders vote for favorites, winners
-                                    get
-                                    prizes</p>
+                                <p className="mt-3 text-sm text-muted-foreground">Crafter Station internal vote. Best projects featured locally and globally.</p>
                             </CardContent>
                         </div>
                     </Card>

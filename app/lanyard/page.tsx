@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import LanyardPage from "@/components/lanyard-page";
 
 // Event details - you can edit these
-const EVENT_CITY = "Guadalajara";
+const EVENT_CITY = "Lima";
 const EVENT_DATE = "February 2026";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://v0guadalajara.vercel.app";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://v0-lima.vercel.app";
 
 // Decryption helper for metadata generation
 function decryptLanyardData(encrypted: string): { username: string; variant: "dark" | "light" } | null {
-  const OBFUSCATION_KEY = "v0gdl";
+  const OBFUSCATION_KEY = "v0lima";
   
   if (!encrypted) return null;
   try {
