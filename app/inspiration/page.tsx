@@ -177,11 +177,18 @@ export default function InspirationPage() {
                         className="text-3xl font-semibold mb-4">
                         Ready to ship?
                     </TextEffect>
-                    <Button asChild size="lg">
-                        <Link href="/submit">
-                            <span>Submit your build</span>
-                        </Link>
-                    </Button>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <Button asChild size="lg">
+                            <Link href="https://v0-v0prompttoproduction2026.vercel.app/submit" target="_blank" rel="noopener noreferrer">
+                                <span>Submit to v0 global</span>
+                            </Link>
+                        </Button>
+                        <Button asChild size="lg" variant="outline">
+                            <Link href="/internal">
+                                <span>Community vote</span>
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
             </section>
         </main>

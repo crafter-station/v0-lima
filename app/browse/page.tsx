@@ -162,7 +162,7 @@ export default function BrowsePage() {
               No submissions yet. Be the first to submit!
             </p>
             <Button asChild>
-              <Link href="/submit">Submit your build</Link>
+              <Link href="/internal">Submit to community vote</Link>
             </Button>
           </div>
         ) : (

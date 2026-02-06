@@ -72,7 +72,7 @@ export default function HeroSection() {
                                     asChild
                                     size="lg"
                                     className="px-5 text-base">
-                                    <Link href="/submit">
+                                    <Link href="https://v0-v0prompttoproduction2026.vercel.app/submit" target="_blank" rel="noopener noreferrer">
                                         <span className="text-nowrap">Submit your build</span>
                                     </Link>
                                 </Button>

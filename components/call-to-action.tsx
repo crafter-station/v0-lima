@@ -44,7 +44,7 @@ export default function CallToAction() {
                         <Button
                             asChild
                             size="lg">
-                            <Link href="/submit">
+                            <Link href="https://v0-v0prompttoproduction2026.vercel.app/submit" target="_blank" rel="noopener noreferrer">
                                 <span>Submit your build</span>
                             </Link>
                         </Button>

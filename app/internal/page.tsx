@@ -67,10 +67,10 @@ export default function SubmitPage() {
           <CheckCircle2 className="mx-auto h-16 w-16 text-green-500 mb-6" />
           <h1 className="text-3xl font-semibold mb-4">Project submitted!</h1>
           <p className="text-muted-foreground mb-4">
-            Your project is now live on the Crafter Station community showcase.
+            Your project is now part of the Crafter Station community vote.
           </p>
           <p className="text-muted-foreground mb-8">
-            To see the results and connect with other builders, join the community on Discord or WhatsApp.
+            Join the community on WhatsApp to see results and connect with other builders.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild size="lg">
@@ -90,7 +90,7 @@ export default function SubmitPage() {
       <section className="mx-auto max-w-xl px-6">
         <div className="text-center mb-10">
           <span className="font-mono text-sm text-muted-foreground uppercase">
-            Submit
+            Crafter Station Internal
           </span>
           <TextEffect
             preset="fade-in-blur"
@@ -98,10 +98,10 @@ export default function SubmitPage() {
             as="h1"
             className="mt-4 text-balance text-3xl font-semibold md:text-4xl"
           >
-            Submit your build
+            Community vote
           </TextEffect>
           <p className="mt-3 text-muted-foreground">
-            Deploy your project, share it publicly, and submit it here.
+            Submit your project for the Crafter Station internal vote. Best projects will be featured in our community showcase.
           </p>
         </div>
 

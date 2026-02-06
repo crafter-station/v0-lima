@@ -41,11 +41,11 @@ export default function RootLayout({
     return (
         <html lang="en" className="dark">
         <body className="font-sans antialiased">
-        <div className='absolute w-full h-dvh max-h-155 sm:max-h-115 md:max-h-125 lg:max-h-190 xl:max-h-195'>
+        <div className='pointer-events-none absolute w-full h-dvh max-h-155 sm:max-h-115 md:max-h-125 lg:max-h-190 xl:max-h-195'>
             <Dither
                 waveColor={[0.30980392156862746, 0.30980392156862746, 0.30980392156862746]}
                 disableAnimation={false}
-                enableMouseInteraction
+                enableMouseInteraction={false}
                 mouseRadius={0.3}
                 colorNum={4}
                 pixelSize={2}
@@ -54,9 +54,11 @@ export default function RootLayout({
                 waveSpeed={0.05}
             />
         </div>
+        <div className="relative z-10">
         <HeroHeader/>
         {children}
         <FooterSection/>
+        </div>
         <Analytics/>
         </body>
         </html>

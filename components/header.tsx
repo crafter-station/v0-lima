@@ -54,8 +54,16 @@ export const HeroHeader = () => {
                                 </Button>
                                 <Button
                                     asChild
+                                    size="sm"
+                                    variant="ghost">
+                                    <Link href="/internal">
+                                        <span>Community vote</span>
+                                    </Link>
+                                </Button>
+                                <Button
+                                    asChild
                                     size="sm">
-                                    <Link href="/submit">
+                                    <Link href="https://v0-v0prompttoproduction2026.vercel.app/submit" target="_blank" rel="noopener noreferrer">
                                         <span>Submit</span>
                                     </Link>
                                 </Button>
