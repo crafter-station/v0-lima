@@ -23,8 +23,8 @@ export default function CallToAction() {
                         speedSegment={0.3}
                         delay={0.3}
                         as="p"
-                        className="mt-4 text-muted-foreground">
-                        Build something real with v0 and compete for prizes. One session, real apps, real work.
+                        className="mt-4 text-muted-foreground max-w-lg mx-auto">
+                        Submit to the v0 global showcase, then register your project for the Lima community vote.
                     </TextEffect>
                     <AnimatedGroup
                         triggerOnView
@@ -45,7 +45,7 @@ export default function CallToAction() {
                             asChild
                             size="lg">
                             <Link href="https://v0-v0prompttoproduction2026.vercel.app/submit" target="_blank" rel="noopener noreferrer">
-                                <span>Submit your build</span>
+                                <span>1. Submit to v0</span>
                             </Link>
                         </Button>
 
@@ -53,11 +53,17 @@ export default function CallToAction() {
                             asChild
                             size="lg"
                             variant="outline">
-                            <Link href="https://lu.ma/vtg473h3" target="_blank" rel="noopener noreferrer">
-                                <span>Join waitlist</span>
+                            <Link href="/internal">
+                                <span>2. Community vote</span>
                             </Link>
                         </Button>
                     </AnimatedGroup>
+                    <p className="mt-4 text-xs text-muted-foreground">
+                        Not attending?{" "}
+                        <Link href="https://lu.ma/vtg473h3" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
+                            Join the waitlist
+                        </Link>
+                    </p>
                 </div>
             </div>
         </section>

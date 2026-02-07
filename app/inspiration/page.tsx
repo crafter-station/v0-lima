@@ -177,15 +177,18 @@ export default function InspirationPage() {
                         className="text-3xl font-semibold mb-4">
                         Ready to ship?
                     </TextEffect>
+                    <p className="text-muted-foreground mb-6">
+                        Submit to both for maximum visibility.
+                    </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                         <Button asChild size="lg">
                             <Link href="https://v0-v0prompttoproduction2026.vercel.app/submit" target="_blank" rel="noopener noreferrer">
-                                <span>Submit to v0 global</span>
+                                <span>1. Submit to v0</span>
                             </Link>
                         </Button>
                         <Button asChild size="lg" variant="outline">
                             <Link href="/internal">
-                                <span>Community vote</span>
+                                <span>2. Community vote</span>
                             </Link>
                         </Button>
                     </div>

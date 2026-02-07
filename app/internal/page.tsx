@@ -66,12 +66,23 @@ export default function SubmitPage() {
         <section className="mx-auto max-w-xl px-6 text-center">
           <CheckCircle2 className="mx-auto h-16 w-16 text-green-500 mb-6" />
           <h1 className="text-3xl font-semibold mb-4">Project submitted!</h1>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-8">
             Your project is now part of the Crafter Station community vote.
           </p>
-          <p className="text-muted-foreground mb-8">
-            Join the community on WhatsApp to see results and connect with other builders.
-          </p>
+          <div className="mb-8 rounded-lg border border-dashed border-foreground/20 bg-muted/50 px-4 py-4 text-center">
+            <p className="text-sm font-medium mb-2">
+              Don&apos;t forget to submit to the v0 global showcase too!
+            </p>
+            <Button asChild size="sm" variant="outline">
+              <a
+                href="https://v0-v0prompttoproduction2026.vercel.app/submit"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Submit to v0 global
+              </a>
+            </Button>
+          </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button asChild size="lg">
               <Link href="/browse">Browse & vote</Link>
@@ -88,7 +99,7 @@ export default function SubmitPage() {
   return (
     <main className="overflow-x-hidden pt-24 pb-16">
       <section className="mx-auto max-w-xl px-6">
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <span className="font-mono text-sm text-muted-foreground uppercase">
             Crafter Station Internal
           </span>
@@ -102,6 +113,27 @@ export default function SubmitPage() {
           </TextEffect>
           <p className="mt-3 text-muted-foreground">
             Submit your project for the Crafter Station internal vote. Best projects will be featured in our community showcase.
+          </p>
+        </div>
+
+        <div className="mb-8 rounded-lg border border-dashed border-foreground/20 bg-muted/50 px-4 py-4 text-center">
+          <p className="text-sm text-muted-foreground mb-2">
+            Already submitted to the v0 global showcase?
+          </p>
+          <p className="text-sm font-medium mb-3">
+            Submit here too so the Lima community can vote on your project.
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Haven&apos;t submitted globally yet?{" "}
+            <a
+              href="https://v0-v0prompttoproduction2026.vercel.app/submit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground transition-colors"
+            >
+              Submit to v0 first
+            </a>
+            , then come back here.
           </p>
         </div>
 
