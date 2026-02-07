@@ -581,15 +581,7 @@ export function EventDeck() {
         {currentSlide === 6 && (
           <div className={slideClasses} key={`v0-${slideKey}`}>
             <div className="max-w-4xl text-center relative z-10">
-              <V0Icon size={48} className="text-foreground mx-auto mb-6" />
-              <TextEffect
-                preset="fade-in-blur"
-                speedSegment={0.3}
-                as="h2"
-                className="text-balance text-5xl md:text-7xl lg:text-8xl font-medium"
-              >
-                v0
-              </TextEffect>
+              <V0Icon size={120} className="text-foreground mx-auto mb-8" />
               <TextEffect
                 per="line"
                 preset="fade-in-blur"
