@@ -48,7 +48,7 @@ const TRACKS = [
 
 const HOSTS = [
   { name: "Railly Hugo", role: "Founder, Crafter Station" },
-  { name: "Shiara Arauzo", role: "Design Engineer" },
+  { name: "Shiara Arauzo", role: "Co-founder Crafter Station & COO", image: "/shiara-arauzo.jpeg" },
   { name: "Edward Ramos", role: "Community Lead" },
 ];
 
@@ -79,12 +79,16 @@ export function EventDeck() {
   const nextSlide = useCallback(() => {
     if (currentSlide < slides.length - 1) {
       goToSlide(currentSlide + 1, "next");
+    } else {
+      goToSlide(0, "next");
     }
   }, [currentSlide, goToSlide]);
 
   const prevSlide = useCallback(() => {
     if (currentSlide > 0) {
       goToSlide(currentSlide - 1, "prev");
+    } else {
+      goToSlide(slides.length - 1, "prev");
     }
   }, [currentSlide, goToSlide]);
 
@@ -259,7 +263,7 @@ export function EventDeck() {
       </a>
 
       {/* Slides */}
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-full cursor-pointer" onClick={nextSlide}>
         {/* Slide 1: Intro */}
         {currentSlide === 0 && (
           <div className={slideClasses} key={`intro-${slideKey}`}>
@@ -395,15 +399,19 @@ export function EventDeck() {
                 {HOSTS.map((host) => (
                   <div
                     key={host.name}
-                    className="rounded-xl border bg-background/50 backdrop-blur-sm p-8 text-center"
+                    className="rounded-xl border bg-background/50 backdrop-blur-sm p-8 text-center h-full"
                   >
-                    <div className="size-16 rounded-full border bg-background flex items-center justify-center mx-auto mb-6">
-                      <span className="text-xl font-semibold font-mono">
-                        {host.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </span>
+                    <div className="size-16 rounded-full border bg-background flex items-center justify-center mx-auto mb-6 overflow-hidden">
+                      {host.image ? (
+                        <img src={host.image} alt={host.name} className="size-full object-cover" />
+                      ) : (
+                        <span className="text-xl font-semibold font-mono">
+                          {host.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </span>
+                      )}
                     </div>
                     <h3 className="text-lg font-medium">{host.name}</h3>
                     <p className="text-sm text-muted-foreground font-mono mt-1">
