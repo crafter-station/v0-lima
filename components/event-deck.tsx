@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { TextEffect } from "@/components/motion-primitives/text-effect";
 import { AnimatedGroup } from "@/components/motion-primitives/animated-group";
-import DecryptedText from "@/components/DecryptedText";
 import { transitionVariants } from "@/lib/utils";
 import V0Icon from "@/components/icons/v0-icon";
 import CrafterStationIcon from "@/components/icons/crafter-station-icon";
@@ -12,45 +11,108 @@ import CrafterStationIcon from "@/components/icons/crafter-station-icon";
 const Dither = dynamic(() => import("@/components/Dither"), { ssr: false });
 
 const slides = [
-  { id: "intro", label: "Intro" },
-  { id: "context", label: "Context" },
-  { id: "hosts", label: "Hosts" },
-  { id: "agenda", label: "Agenda" },
-  { id: "tracks", label: "Tracks" },
-  { id: "rules", label: "Rules" },
-  { id: "v0", label: "v0" },
-  { id: "build", label: "Build" },
-  { id: "submit", label: "Submit" },
+  { id: "title", label: "Title" },
+  { id: "numbers", label: "Numbers" },
+  { id: "cities", label: "Cities" },
+  { id: "lima", label: "Lima" },
+  { id: "medellin", label: "Medellin" },
+  { id: "bogota", label: "Bogota" },
+  { id: "arequipa", label: "Arequipa" },
+  { id: "diversity", label: "Diversity" },
+  { id: "photos", label: "Photos" },
+  { id: "infographic", label: "Summary" },
   { id: "thanks", label: "Thanks" },
 ];
 
-const AGENDA_ITEMS = [
-  { time: "9:30", label: "Walk-in & warm-up", duration: "20 min" },
-  { time: "9:50", label: "Kickoff & context", duration: "20 min" },
-  { time: "10:10", label: "Form groups", duration: "10 min" },
-  { time: "10:20", label: "v0 demo", duration: "10 min" },
-  { time: "10:30", label: "Build time \u2014 Block 1", duration: "60 min" },
-  { time: "11:30", label: "Break + checkpoint", duration: "10 min" },
-  { time: "11:40", label: "Build time \u2014 Final block", duration: "20 min" },
-  { time: "12:00", label: "Ship & submit", duration: "10 min" },
-  { time: "12:10", label: "Gallery walk", duration: "15 min" },
-  { time: "12:25", label: "Closing & group photo", duration: "5 min" },
+const CITIES = [
+  {
+    name: "Lima",
+    country: "Peru",
+    flag: "🇵🇪",
+    registered: "60+",
+    attendees: 34,
+    projects: 20,
+    women: 12,
+    womenPct: "35%",
+    venue: "UTEC Ventures, Barranco",
+  },
+  {
+    name: "Medellin",
+    country: "Colombia",
+    flag: "🇨🇴",
+    registered: "55+",
+    attendees: 32,
+    projects: 18,
+    women: 11,
+    womenPct: "34%",
+    venue: "Ruta N",
+  },
+  {
+    name: "Bogota",
+    country: "Colombia",
+    flag: "🇨🇴",
+    registered: "45+",
+    attendees: 26,
+    projects: 14,
+    women: 9,
+    womenPct: "35%",
+    venue: "Hub Asobancaria",
+  },
+  {
+    name: "Arequipa",
+    country: "Peru",
+    flag: "🇵🇪",
+    registered: "60+",
+    attendees: 26,
+    projects: 14,
+    women: 0,
+    womenPct: "—",
+    venue: "UNSA",
+  },
 ];
 
-const TRACKS = [
-  { name: "GTM", tagline: "Close deals faster with AI-powered tools" },
-  { name: "Marketing", tagline: "Turn ideas into campaigns that ship" },
-  { name: "Product", tagline: "From PRD to prototype in one session" },
-  { name: "Design", tagline: "Refine layouts and maintain systems" },
-  { name: "Dev", tagline: "Unblock stakeholders, automate the tedious" },
-  { name: "Data & Ops", tagline: "Automate reporting and surface insights" },
-];
+function AnimatedNumber({
+  value,
+  suffix = "",
+  prefix = "",
+  delay = 0,
+}: {
+  value: number;
+  suffix?: string;
+  prefix?: string;
+  delay?: number;
+}) {
+  const [display, setDisplay] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
 
-const HOSTS = [
-  { name: "Railly Hugo", role: "Founder, Crafter Station" },
-  { name: "Shiara Arauzo", role: "Co-founder Crafter Station & COO", image: "/shiara-arauzo.jpeg" },
-  { name: "Edward Ramos", role: "Community Lead" },
-];
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const duration = 1200;
+      const steps = 40;
+      const increment = value / steps;
+      let current = 0;
+      const interval = setInterval(() => {
+        current += increment;
+        if (current >= value) {
+          setDisplay(value);
+          clearInterval(interval);
+        } else {
+          setDisplay(Math.floor(current));
+        }
+      }, duration / steps);
+      return () => clearInterval(interval);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [value, delay]);
+
+  return (
+    <span ref={ref}>
+      {prefix}
+      {display.toLocaleString()}
+      {suffix}
+    </span>
+  );
+}
 
 export function EventDeck() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -106,6 +168,8 @@ export function EventDeck() {
       } else if (e.key === "End") {
         e.preventDefault();
         goToSlide(slides.length - 1);
+      } else if (e.key === "Escape") {
+        window.location.href = "/";
       } else if (e.key >= "1" && e.key <= "9") {
         const index = parseInt(e.key) - 1;
         if (index < slides.length) {
@@ -165,7 +229,7 @@ export function EventDeck() {
   return (
     <div className="fixed inset-0 z-50 bg-background overflow-hidden font-sans">
       {/* Dither background */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-30">
         <Dither enableMouseInteraction={false} />
       </div>
 
@@ -214,6 +278,12 @@ export function EventDeck() {
             &rarr;
           </kbd>
           <span className="ml-1 font-mono text-xs">navigate</span>
+        </span>
+        <span className="flex items-center gap-1">
+          <kbd className="px-2 py-1 bg-background/80 backdrop-blur-sm border border-border rounded-sm text-xs font-mono">
+            esc
+          </kbd>
+          <span className="ml-1 font-mono text-xs">home</span>
         </span>
       </div>
 
@@ -264,9 +334,9 @@ export function EventDeck() {
 
       {/* Slides */}
       <div className="relative w-full h-full cursor-pointer" onClick={nextSlide}>
-        {/* Slide 1: Intro */}
+        {/* Slide 1: Title */}
         {currentSlide === 0 && (
-          <div className={slideClasses} key={`intro-${slideKey}`}>
+          <div className={slideClasses} key={`title-${slideKey}`}>
             <div className="text-center max-w-5xl relative z-10">
               <div className="flex items-center justify-center gap-3 mb-8">
                 <V0Icon size={28} className="text-foreground" />
@@ -277,482 +347,705 @@ export function EventDeck() {
                 preset="fade-in-blur"
                 speedSegment={0.3}
                 as="h1"
-                className="text-balance text-6xl md:text-8xl lg:text-[10rem] font-medium leading-[0.9] tracking-tighter"
+                className="text-balance text-5xl md:text-7xl lg:text-[9rem] font-medium leading-[0.9] tracking-tighter"
               >
-                Prompt
+                Prompt to
               </TextEffect>
               <TextEffect
                 preset="fade-in-blur"
                 speedSegment={0.3}
                 delay={0.2}
                 as="h1"
-                className="text-balance text-6xl md:text-8xl lg:text-[10rem] font-medium leading-[0.9] tracking-tighter"
+                className="text-balance text-5xl md:text-7xl lg:text-[9rem] font-medium leading-[0.9] tracking-tighter"
               >
-                to Production
+                Production
               </TextEffect>
-              <div className="mt-8">
-                <DecryptedText
-                  text="Saturday February 7th, 2026 - Lima, Peru"
-                  animateOn="view"
-                  revealDirection="start"
-                  sequential
-                  useOriginalCharsOnly={false}
-                  speed={70}
-                  className="font-mono text-muted-foreground bg-background/80 backdrop-blur-sm rounded-md uppercase text-sm md:text-base"
-                />
-              </div>
-              <TextEffect
-                per="line"
-                preset="fade-in-blur"
-                speedSegment={0.3}
-                delay={0.6}
-                as="p"
-                className="mt-4 text-muted-foreground/70 font-mono text-sm"
-              >
-                UTEC Ventures, Barranco
-              </TextEffect>
-            </div>
-          </div>
-        )}
-
-        {/* Slide 2: Context */}
-        {currentSlide === 1 && (
-          <div className={slideClasses} key={`context-${slideKey}`}>
-            <div className="max-w-4xl relative z-10">
-              <span className="font-mono text-sm text-muted-foreground uppercase">
-                What is this?
-              </span>
-              <TextEffect
-                preset="fade-in-blur"
-                speedSegment={0.3}
-                as="h2"
-                className="mt-4 text-balance text-4xl md:text-5xl lg:text-6xl font-semibold"
-              >
-                v0 Prompt to Production Week
-              </TextEffect>
-              <TextEffect
-                per="line"
-                preset="fade-in-blur"
-                speedSegment={0.3}
-                delay={0.3}
-                as="p"
-                className="mt-6 text-lg text-muted-foreground max-w-2xl"
-              >
-                A global build week by Vercel. Build real apps with v0 and submit to the community gallery.
-              </TextEffect>
-              <AnimatedGroup
-                variants={{
-                  container: {
-                    visible: {
-                      transition: { staggerChildren: 0.05, delayChildren: 0.75 },
-                    },
-                  },
-                  ...transitionVariants,
-                }}
-                className="mt-10 flex flex-col sm:flex-row gap-4"
-              >
-                <div className="flex-1 rounded-xl border bg-background/50 backdrop-blur-sm p-6">
-                  <p className="text-5xl font-semibold font-mono">6</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    events across Latin America
-                  </p>
-                </div>
-                <div className="flex-1 rounded-xl border bg-background/50 backdrop-blur-sm p-6">
-                  <p className="text-5xl font-semibold font-mono">4</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    hosted by Crafter Station
-                  </p>
-                </div>
-              </AnimatedGroup>
-            </div>
-          </div>
-        )}
-
-        {/* Slide 3: Hosts */}
-        {currentSlide === 2 && (
-          <div className={slideClasses} key={`hosts-${slideKey}`}>
-            <div className="max-w-4xl w-full relative z-10">
-              <div className="text-center mb-10">
-                <span className="font-mono text-sm text-muted-foreground uppercase">
-                  Your hosts
-                </span>
-                <TextEffect
-                  preset="fade-in-blur"
-                  speedSegment={0.3}
-                  as="h2"
-                  className="mt-4 text-balance text-4xl font-semibold md:text-5xl"
-                >
-                  Meet the team
-                </TextEffect>
-              </div>
-              <AnimatedGroup
-                variants={{
-                  container: {
-                    visible: {
-                      transition: { staggerChildren: 0.1, delayChildren: 0.3 },
-                    },
-                  },
-                  ...transitionVariants,
-                }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
-              >
-                {HOSTS.map((host) => (
-                  <div
-                    key={host.name}
-                    className="rounded-xl border bg-background/50 backdrop-blur-sm p-8 text-center h-full"
-                  >
-                    <div className="size-16 rounded-full border bg-background flex items-center justify-center mx-auto mb-6 overflow-hidden">
-                      {host.image ? (
-                        <img src={host.image} alt={host.name} className="size-full object-cover" />
-                      ) : (
-                        <span className="text-xl font-semibold font-mono">
-                          {host.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="text-lg font-medium">{host.name}</h3>
-                    <p className="text-sm text-muted-foreground font-mono mt-1">
-                      {host.role}
-                    </p>
-                  </div>
-                ))}
-              </AnimatedGroup>
-            </div>
-          </div>
-        )}
-
-        {/* Slide 4: Agenda */}
-        {currentSlide === 3 && (
-          <div className={slideClasses} key={`agenda-${slideKey}`}>
-            <div className="max-w-2xl w-full relative z-10">
-              <div className="text-center mb-8">
-                <span className="font-mono text-sm text-muted-foreground uppercase">
-                  Schedule
-                </span>
-                <TextEffect
-                  preset="fade-in-blur"
-                  speedSegment={0.3}
-                  as="h2"
-                  className="mt-4 text-balance text-3xl font-semibold md:text-4xl"
-                >
-                  Agenda
-                </TextEffect>
-              </div>
-              <AnimatedGroup
-                variants={{
-                  container: {
-                    visible: {
-                      transition: { staggerChildren: 0.04, delayChildren: 0.3 },
-                    },
-                  },
-                  ...transitionVariants,
-                }}
-                className="divide-y divide-dashed"
-              >
-                {AGENDA_ITEMS.map((item) => (
-                  <div
-                    key={item.time}
-                    className="flex items-center gap-4 md:gap-6 py-3"
-                  >
-                    <span className="text-muted-foreground font-mono text-sm w-14 shrink-0">
-                      {item.time}
-                    </span>
-                    <span className="text-sm md:text-base flex-1">
-                      {item.label}
-                    </span>
-                    <span className="text-muted-foreground font-mono text-xs shrink-0">
-                      {item.duration}
-                    </span>
-                  </div>
-                ))}
-              </AnimatedGroup>
-            </div>
-          </div>
-        )}
-
-        {/* Slide 5: Tracks */}
-        {currentSlide === 4 && (
-          <div className={slideClasses} key={`tracks-${slideKey}`}>
-            <div className="max-w-5xl w-full relative z-10">
-              <div className="text-center mb-8">
-                <span className="font-mono text-sm text-muted-foreground uppercase">
-                  Pick your track
-                </span>
-                <TextEffect
-                  preset="fade-in-blur"
-                  speedSegment={0.3}
-                  as="h2"
-                  className="mt-4 text-balance text-3xl font-semibold md:text-4xl"
-                >
-                  Tracks
-                </TextEffect>
-                <p className="mt-2 text-muted-foreground font-mono text-sm">
-                  Tracks are guidance, not rules.
-                </p>
-              </div>
-              <AnimatedGroup
-                variants={{
-                  container: {
-                    visible: {
-                      transition: { staggerChildren: 0.05, delayChildren: 0.3 },
-                    },
-                  },
-                  ...transitionVariants,
-                }}
-                className="grid grid-cols-2 md:grid-cols-3 gap-4"
-              >
-                {TRACKS.map((track) => (
-                  <div
-                    key={track.name}
-                    className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 transition-colors hover:border-foreground/20"
-                  >
-                    <h3 className="text-lg font-medium mb-1">{track.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {track.tagline}
-                    </p>
-                  </div>
-                ))}
-              </AnimatedGroup>
-            </div>
-          </div>
-        )}
-
-        {/* Slide 6: Rules */}
-        {currentSlide === 5 && (
-          <div className={slideClasses} key={`rules-${slideKey}`}>
-            <div className="max-w-3xl relative z-10">
-              <span className="font-mono text-sm text-muted-foreground uppercase">
-                Ground rules
-              </span>
-              <TextEffect
-                preset="fade-in-blur"
-                speedSegment={0.3}
-                as="h2"
-                className="mt-4 text-balance text-4xl font-semibold md:text-5xl lg:text-6xl"
-              >
-                How we roll
-              </TextEffect>
-              <AnimatedGroup
-                variants={{
-                  container: {
-                    visible: {
-                      transition: { staggerChildren: 0.1, delayChildren: 0.5 },
-                    },
-                  },
-                  ...transitionVariants,
-                }}
-                className="mt-10 space-y-6"
-              >
-                {[
-                  {
-                    n: "01",
-                    title: "Ship > perfecto",
-                    desc: "Done is better than perfect. Get it live.",
-                  },
-                  {
-                    n: "02",
-                    title: "Solo or in groups",
-                    desc: "Build alone or team up (3\u20134 people max).",
-                  },
-                  {
-                    n: "03",
-                    title: "Publish on X / LinkedIn",
-                    desc: "Share what you build. Build in public.",
-                  },
-                  {
-                    n: "04",
-                    title: "$10 v0 credits",
-                    desc: "Every participant gets $10 in v0 credits.",
-                  },
-                ].map((rule) => (
-                  <div key={rule.n} className="flex items-start gap-5">
-                    <span className="font-mono text-muted-foreground text-sm mt-1 shrink-0 w-6">
-                      {rule.n}
-                    </span>
-                    <div>
-                      <h3 className="font-medium text-lg">{rule.title}</h3>
-                      <p className="text-muted-foreground text-sm mt-1">
-                        {rule.desc}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </AnimatedGroup>
-            </div>
-          </div>
-        )}
-
-        {/* Slide 7: v0 */}
-        {currentSlide === 6 && (
-          <div className={slideClasses} key={`v0-${slideKey}`}>
-            <div className="max-w-4xl text-center relative z-10">
-              <V0Icon size={120} className="text-foreground mx-auto mb-8" />
-              <TextEffect
-                per="line"
-                preset="fade-in-blur"
-                speedSegment={0.3}
-                delay={0.3}
-                as="p"
-                className="mt-6 text-xl text-muted-foreground"
-              >
-                Prompt to production-ready UI in seconds. Built by Vercel. Powered by AI.
-              </TextEffect>
-              <AnimatedGroup
-                variants={{
-                  container: {
-                    visible: {
-                      transition: { staggerChildren: 0.05, delayChildren: 0.75 },
-                    },
-                  },
-                  ...transitionVariants,
-                }}
-                className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto"
-              >
-                {[
-                  { step: "Prompt", desc: "Describe what you want" },
-                  { step: "Generate", desc: "AI builds the UI" },
-                  { step: "Ship", desc: "Deploy to production" },
-                ].map((item) => (
-                  <div
-                    key={item.step}
-                    className="rounded-xl border bg-background/50 backdrop-blur-sm p-5"
-                  >
-                    <p className="font-mono font-medium mb-1">{item.step}</p>
-                    <p className="text-sm text-muted-foreground">{item.desc}</p>
-                  </div>
-                ))}
-              </AnimatedGroup>
-              <a
-                href="https://v0.dev"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-8 font-mono text-sm text-muted-foreground hover:text-foreground transition-colors underline"
-              >
-                v0.dev &rarr;
-              </a>
-            </div>
-          </div>
-        )}
-
-        {/* Slide 8: Build Time */}
-        {currentSlide === 7 && (
-          <div className={slideClasses} key={`build-${slideKey}`}>
-            <div className="text-center max-w-5xl relative z-10">
-              <TextEffect
-                preset="fade-in-blur"
-                speedSegment={0.3}
-                as="h2"
-                className="text-balance text-6xl md:text-8xl lg:text-[10rem] font-medium leading-[0.9] tracking-tighter"
-              >
-                Time to build
-              </TextEffect>
-              <div className="mt-12 space-y-3">
+              <div className="mt-10">
                 <TextEffect
                   per="line"
                   preset="fade-in-blur"
                   speedSegment={0.3}
                   delay={0.5}
                   as="p"
-                  className="text-lg md:text-xl text-muted-foreground"
+                  className="font-mono text-muted-foreground uppercase text-sm md:text-base tracking-widest"
                 >
-                  +10 min stuck? Ask for help.
+                  LATAM Results &middot; February 2026
                 </TextEffect>
-                <p className="text-muted-foreground/60 font-mono text-sm">
-                  Hosts are here to support you.
+              </div>
+              <TextEffect
+                per="line"
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                delay={0.8}
+                as="p"
+                className="mt-3 text-muted-foreground/50 font-mono text-xs"
+              >
+                4 cities &middot; 260+ registered &middot; 52 projects shipped
+              </TextEffect>
+            </div>
+          </div>
+        )}
+
+        {/* Slide 2: The Numbers */}
+        {currentSlide === 1 && (
+          <div className={slideClasses} key={`numbers-${slideKey}`}>
+            <div className="max-w-5xl w-full relative z-10">
+              <span className="font-mono text-sm text-muted-foreground uppercase tracking-widest">
+                The numbers
+              </span>
+              <TextEffect
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                as="h2"
+                className="mt-4 text-balance text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight"
+              >
+                One day. Four cities. Real impact.
+              </TextEffect>
+              <AnimatedGroup
+                variants={{
+                  container: {
+                    visible: {
+                      transition: { staggerChildren: 0.1, delayChildren: 0.4 },
+                    },
+                  },
+                  ...transitionVariants,
+                }}
+                className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+              >
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8">
+                  <p className="text-5xl md:text-7xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={4} delay={500} />
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-3 font-mono">
+                    cities
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8">
+                  <p className="text-5xl md:text-7xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={260} suffix="+" delay={650} />
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-3 font-mono">
+                    registered
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8">
+                  <p className="text-5xl md:text-7xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={92} delay={800} />
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-3 font-mono">
+                    attendees
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8">
+                  <p className="text-5xl md:text-7xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={52} delay={950} />
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-3 font-mono">
+                    projects shipped
+                  </p>
+                </div>
+              </AnimatedGroup>
+              <TextEffect
+                per="line"
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                delay={1.5}
+                as="p"
+                className="mt-8 text-muted-foreground/60 font-mono text-sm text-center"
+              >
+                All in a single day.
+              </TextEffect>
+            </div>
+          </div>
+        )}
+
+        {/* Slide 3: Cities Overview */}
+        {currentSlide === 2 && (
+          <div className={slideClasses} key={`cities-${slideKey}`}>
+            <div className="max-w-5xl w-full relative z-10">
+              <span className="font-mono text-sm text-muted-foreground uppercase tracking-widest">
+                By city
+              </span>
+              <TextEffect
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                as="h2"
+                className="mt-4 text-balance text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight"
+              >
+                Four cities, one mission
+              </TextEffect>
+              <AnimatedGroup
+                variants={{
+                  container: {
+                    visible: {
+                      transition: { staggerChildren: 0.08, delayChildren: 0.4 },
+                    },
+                  },
+                  ...transitionVariants,
+                }}
+                className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                {CITIES.map((city) => (
+                  <div
+                    key={city.name}
+                    className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 flex flex-col"
+                  >
+                    <div className="flex items-baseline justify-between mb-4">
+                      <h3 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                        {city.name}
+                      </h3>
+                      <span className="text-muted-foreground font-mono text-xs uppercase flex items-center gap-1.5">
+                        <span className="text-base">{city.flag}</span>
+                        {city.country}
+                      </span>
+                    </div>
+                    <div className="flex items-end gap-6 mt-auto">
+                      <div>
+                        <p className="text-3xl md:text-4xl font-semibold font-mono tracking-tighter">
+                          {city.registered}
+                        </p>
+                        <p className="text-xs text-muted-foreground font-mono mt-1">
+                          registered
+                        </p>
+                      </div>
+                      {city.attendees > 0 && (
+                        <div>
+                          <p className="text-3xl md:text-4xl font-semibold font-mono tracking-tighter">
+                            {city.attendees}
+                          </p>
+                          <p className="text-xs text-muted-foreground font-mono mt-1">
+                            attended
+                          </p>
+                        </div>
+                      )}
+                      {city.projects > 0 && (
+                        <div>
+                          <p className="text-3xl md:text-4xl font-semibold font-mono tracking-tighter">
+                            {city.projects}
+                          </p>
+                          <p className="text-xs text-muted-foreground font-mono mt-1">
+                            projects
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </AnimatedGroup>
+            </div>
+          </div>
+        )}
+
+        {/* Slide 4: Lima Deep Dive */}
+        {currentSlide === 3 && (
+          <div className={slideClasses} key={`lima-${slideKey}`}>
+            <div className="max-w-4xl w-full relative z-10">
+              <span className="font-mono text-sm text-muted-foreground uppercase tracking-widest">
+                🇵🇪 Lima, Peru
+              </span>
+              <TextEffect
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                as="h2"
+                className="mt-4 text-balance text-4xl md:text-5xl lg:text-7xl font-semibold tracking-tight"
+              >
+                The flagship
+              </TextEffect>
+              <AnimatedGroup
+                variants={{
+                  container: {
+                    visible: {
+                      transition: { staggerChildren: 0.1, delayChildren: 0.4 },
+                    },
+                  },
+                  ...transitionVariants,
+                }}
+                className="mt-10 grid grid-cols-3 gap-4 md:gap-6"
+              >
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={60} suffix="+" delay={500} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    registered
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={34} delay={650} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    attendees
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={20} delay={800} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    projects shipped
+                  </p>
+                </div>
+              </AnimatedGroup>
+              <AnimatedGroup
+                variants={{
+                  container: {
+                    visible: {
+                      transition: { staggerChildren: 0.1, delayChildren: 1.2 },
+                    },
+                  },
+                  ...transitionVariants,
+                }}
+                className="mt-6 flex flex-col sm:flex-row gap-4"
+              >
+                <div className="flex-1 rounded-xl border border-dashed bg-background/30 backdrop-blur-sm p-5 flex items-center gap-4">
+                  <p className="text-3xl md:text-4xl font-semibold font-mono tracking-tighter">
+                    35%
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    female participation — leading all cities
+                  </p>
+                </div>
+                <div className="flex-1 rounded-xl border border-dashed bg-background/30 backdrop-blur-sm p-5">
+                  <p className="text-sm text-muted-foreground font-mono">
+                    UTEC Ventures, Barranco
+                  </p>
+                  <p className="text-xs text-muted-foreground/50 font-mono mt-1">
+                    Saturday, February 7th
+                  </p>
+                </div>
+              </AnimatedGroup>
+            </div>
+          </div>
+        )}
+
+        {/* Slide 5: Medellin */}
+        {currentSlide === 4 && (
+          <div className={slideClasses} key={`medellin-${slideKey}`}>
+            <div className="max-w-4xl w-full relative z-10">
+              <span className="font-mono text-sm text-muted-foreground uppercase tracking-widest">
+                🇨🇴 Medellin, Colombia
+              </span>
+              <TextEffect
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                as="h2"
+                className="mt-4 text-balance text-4xl md:text-5xl lg:text-7xl font-semibold tracking-tight"
+              >
+                Neck and neck
+              </TextEffect>
+              <AnimatedGroup
+                variants={{
+                  container: {
+                    visible: {
+                      transition: { staggerChildren: 0.1, delayChildren: 0.4 },
+                    },
+                  },
+                  ...transitionVariants,
+                }}
+                className="mt-10 grid grid-cols-3 gap-4 md:gap-6"
+              >
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={55} suffix="+" delay={500} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    registered
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={32} delay={650} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    attendees
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={18} delay={800} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    projects shipped
+                  </p>
+                </div>
+              </AnimatedGroup>
+              <TextEffect
+                per="line"
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                delay={1.2}
+                as="p"
+                className="mt-8 text-muted-foreground/60 font-mono text-sm text-center"
+              >
+                Numbers nearly identical to Lima — strong showing from Colombia.
+              </TextEffect>
+            </div>
+          </div>
+        )}
+
+        {/* Slide 6: Bogota */}
+        {currentSlide === 5 && (
+          <div className={slideClasses} key={`bogota-${slideKey}`}>
+            <div className="max-w-4xl w-full relative z-10">
+              <span className="font-mono text-sm text-muted-foreground uppercase tracking-widest">
+                🇨🇴 Bogota, Colombia
+              </span>
+              <TextEffect
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                as="h2"
+                className="mt-4 text-balance text-4xl md:text-5xl lg:text-7xl font-semibold tracking-tight"
+              >
+                Closing strong
+              </TextEffect>
+              <AnimatedGroup
+                variants={{
+                  container: {
+                    visible: {
+                      transition: { staggerChildren: 0.1, delayChildren: 0.4 },
+                    },
+                  },
+                  ...transitionVariants,
+                }}
+                className="mt-10 grid grid-cols-3 gap-4 md:gap-6"
+              >
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={45} suffix="+" delay={500} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    registered
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={26} delay={650} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    attendees
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={14} delay={800} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    projects shipped
+                  </p>
+                </div>
+              </AnimatedGroup>
+              <TextEffect
+                per="line"
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                delay={1.2}
+                as="p"
+                className="mt-8 text-muted-foreground/60 font-mono text-sm text-center"
+              >
+                Solid turnout. 14 projects shipped with 26 builders.
+              </TextEffect>
+            </div>
+          </div>
+        )}
+
+        {/* Slide 7: Arequipa */}
+        {currentSlide === 6 && (
+          <div className={slideClasses} key={`arequipa-${slideKey}`}>
+            <div className="max-w-4xl w-full relative z-10">
+              <span className="font-mono text-sm text-muted-foreground uppercase tracking-widest">
+                🇵🇪 Arequipa, Peru
+              </span>
+              <TextEffect
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                as="h2"
+                className="mt-4 text-balance text-4xl md:text-5xl lg:text-7xl font-semibold tracking-tight"
+              >
+                The white city
+              </TextEffect>
+              <AnimatedGroup
+                variants={{
+                  container: {
+                    visible: {
+                      transition: { staggerChildren: 0.1, delayChildren: 0.4 },
+                    },
+                  },
+                  ...transitionVariants,
+                }}
+                className="mt-10 grid grid-cols-3 gap-4 md:gap-6"
+              >
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={60} suffix="+" delay={500} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    registered
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={26} delay={650} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    attendees
+                  </p>
+                </div>
+                <div className="rounded-xl border bg-background/50 backdrop-blur-sm p-6 md:p-8 text-center">
+                  <p className="text-4xl md:text-6xl font-semibold font-mono tracking-tighter">
+                    <AnimatedNumber value={14} delay={800} />
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-foreground mt-3 font-mono">
+                    projects shipped
+                  </p>
+                </div>
+              </AnimatedGroup>
+              <TextEffect
+                per="line"
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                delay={1.2}
+                as="p"
+                className="mt-8 text-muted-foreground/60 font-mono text-sm text-center"
+              >
+                Strong turnout from Peru's second city.
+              </TextEffect>
+            </div>
+          </div>
+        )}
+
+        {/* Slide 8: Diversity */}
+        {currentSlide === 7 && (
+          <div className={slideClasses} key={`diversity-${slideKey}`}>
+            <div className="max-w-4xl text-center relative z-10">
+              <span className="font-mono text-sm text-muted-foreground uppercase tracking-widest">
+                The standout metric
+              </span>
+              <div className="mt-8">
+                <TextEffect
+                  preset="fade-in-blur"
+                  speedSegment={0.3}
+                  as="p"
+                  className="text-7xl md:text-9xl lg:text-[12rem] font-semibold font-mono tracking-tighter leading-none"
+                >
+                  34%
+                </TextEffect>
+              </div>
+              <TextEffect
+                per="line"
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                delay={0.4}
+                as="p"
+                className="mt-6 text-xl md:text-2xl text-muted-foreground"
+              >
+                average female participation across all cities
+              </TextEffect>
+              <AnimatedGroup
+                variants={{
+                  container: {
+                    visible: {
+                      transition: { staggerChildren: 0.1, delayChildren: 0.8 },
+                    },
+                  },
+                  ...transitionVariants,
+                }}
+                className="mt-12 flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto"
+              >
+                <div className="flex-1 rounded-xl border bg-background/50 backdrop-blur-sm p-6">
+                  <p className="text-4xl md:text-5xl font-semibold font-mono tracking-tighter">
+                    35%
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Lima — 12 of 34 attendees
+                  </p>
+                </div>
+                <div className="flex-1 rounded-xl border border-dashed bg-background/30 backdrop-blur-sm p-6">
+                  <p className="text-4xl md:text-5xl font-semibold font-mono tracking-tighter text-muted-foreground">
+                    32
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    women builders total across all events
+                  </p>
+                </div>
+              </AnimatedGroup>
+            </div>
+          </div>
+        )}
+
+        {/* Slide 9: Photos */}
+        {currentSlide === 8 && (
+          <div className={slideClasses} key={`photos-${slideKey}`}>
+            <div className="max-w-4xl text-center relative z-10">
+              <TextEffect
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                as="h2"
+                className="text-balance text-5xl md:text-7xl lg:text-8xl font-medium leading-tight tracking-tight"
+              >
+                See it yourself
+              </TextEffect>
+              <TextEffect
+                per="line"
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                delay={0.3}
+                as="p"
+                className="mt-6 text-lg md:text-xl text-muted-foreground"
+              >
+                Event photos from all four cities.
+              </TextEffect>
+              <AnimatedGroup
+                variants={{
+                  container: {
+                    visible: {
+                      transition: { staggerChildren: 0.05, delayChildren: 0.6 },
+                    },
+                  },
+                  ...transitionVariants,
+                }}
+                className="mt-12"
+              >
+                <a
+                  href="https://devshots.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background font-medium rounded-lg hover:bg-foreground/90 transition-colors text-lg font-mono"
+                >
+                  devshots.vercel.app
+                  <svg
+                    className="size-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                    />
+                  </svg>
+                </a>
+              </AnimatedGroup>
+              <TextEffect
+                per="line"
+                preset="fade-in-blur"
+                speedSegment={0.3}
+                delay={0.9}
+                as="p"
+                className="mt-8 text-muted-foreground/50 font-mono text-xs"
+              >
+                Lima &middot; Medellin &middot; Bogota &middot; Arequipa
+              </TextEffect>
+            </div>
+          </div>
+        )}
+
+        {/* Slide 10: Infographic */}
+        {currentSlide === 9 && (
+          <div className={slideClasses} key={`infographic-${slideKey}`}>
+            <div className="max-w-3xl w-full relative z-10 bg-background/80 backdrop-blur-md border rounded-2xl p-8 md:p-12">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-8 pb-6 border-b border-dashed">
+                <div className="flex items-center gap-3">
+                  <V0Icon size={22} className="text-foreground" />
+                  <span className="text-muted-foreground font-mono text-xs">&times;</span>
+                  <CrafterStationIcon size={12} className="text-foreground" />
+                </div>
+                <span className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
+                  Feb 2026
+                </span>
+              </div>
+
+              {/* Title */}
+              <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                Prompt to Production
+              </h2>
+              <p className="text-muted-foreground font-mono text-sm mt-1">
+                LATAM Results
+              </p>
+
+              {/* Big numbers row */}
+              <div className="grid grid-cols-4 gap-4 mt-8">
+                <div>
+                  <p className="text-3xl md:text-5xl font-semibold font-mono tracking-tighter">4</p>
+                  <p className="text-xs text-muted-foreground font-mono mt-1">cities</p>
+                </div>
+                <div>
+                  <p className="text-3xl md:text-5xl font-semibold font-mono tracking-tighter">260+</p>
+                  <p className="text-xs text-muted-foreground font-mono mt-1">registered</p>
+                </div>
+                <div>
+                  <p className="text-3xl md:text-5xl font-semibold font-mono tracking-tighter">92</p>
+                  <p className="text-xs text-muted-foreground font-mono mt-1">attendees</p>
+                </div>
+                <div>
+                  <p className="text-3xl md:text-5xl font-semibold font-mono tracking-tighter">52</p>
+                  <p className="text-xs text-muted-foreground font-mono mt-1">projects</p>
+                </div>
+              </div>
+
+              {/* City breakdown */}
+              <div className="mt-8 pt-6 border-t border-dashed">
+                <div className="grid grid-cols-4 gap-4 mb-3">
+                  <span className="text-xs text-muted-foreground font-mono">City</span>
+                  <span className="text-xs text-muted-foreground font-mono text-right">Reg.</span>
+                  <span className="text-xs text-muted-foreground font-mono text-right">Att.</span>
+                  <span className="text-xs text-muted-foreground font-mono text-right">Projects</span>
+                </div>
+                {[
+                  { flag: "🇵🇪", name: "Lima", reg: "60+", att: "34", proj: "20" },
+                  { flag: "🇨🇴", name: "Medellin", reg: "55+", att: "32", proj: "18" },
+                  { flag: "🇨🇴", name: "Bogota", reg: "45+", att: "26", proj: "14" },
+                  { flag: "🇵🇪", name: "Arequipa", reg: "60+", att: "26", proj: "14" },
+                ].map((city) => (
+                  <div key={city.name} className="grid grid-cols-4 gap-4 py-2 border-t border-border/50">
+                    <span className="text-sm font-medium flex items-center gap-1.5">
+                      <span className="text-base">{city.flag}</span>
+                      {city.name}
+                    </span>
+                    <span className="text-sm font-mono text-right">{city.reg}</span>
+                    <span className="text-sm font-mono text-right">{city.att}</span>
+                    <span className="text-sm font-mono text-right">{city.proj}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Diversity highlight */}
+              <div className="mt-6 pt-6 border-t border-dashed flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Female participation</p>
+                  <p className="text-xs text-muted-foreground/60 font-mono mt-0.5">
+                    Lima leading at 35% (12 of 34)
+                  </p>
+                </div>
+                <p className="text-4xl md:text-5xl font-semibold font-mono tracking-tighter">34%</p>
+              </div>
+
+              {/* Footer */}
+              <div className="mt-8 pt-6 border-t border-dashed flex items-center justify-between">
+                <p className="text-muted-foreground/50 font-mono text-xs">
+                  devshots.vercel.app
+                </p>
+                <p className="text-muted-foreground/50 font-mono text-xs">
+                  Hosted by Crafter Station &middot; Powered by Vercel
                 </p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Slide 9: Submit */}
-        {currentSlide === 8 && (
-          <div className={slideClasses} key={`submit-${slideKey}`}>
-            <div className="max-w-3xl relative z-10">
-              <span className="font-mono text-sm text-muted-foreground uppercase">
-                Ship it
-              </span>
-              <TextEffect
-                preset="fade-in-blur"
-                speedSegment={0.3}
-                as="h2"
-                className="mt-4 text-balance text-4xl font-semibold md:text-5xl lg:text-6xl"
-              >
-                Submit your build
-              </TextEffect>
-              <AnimatedGroup
-                variants={{
-                  container: {
-                    visible: {
-                      transition: { staggerChildren: 0.15, delayChildren: 0.5 },
-                    },
-                  },
-                  ...transitionVariants,
-                }}
-                className="mt-10 space-y-6"
-              >
-                <div className="flex items-start gap-5">
-                  <div className="size-10 rounded-full bg-foreground text-background flex items-center justify-center shrink-0">
-                    <span className="font-mono font-semibold">1</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg">
-                      Submit to v0 global showcase
-                    </h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Your project competes globally with builders worldwide.
-                    </p>
-                    <a
-                      href="https://v0-v0prompttoproduction2026.vercel.app/submit"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block mt-2 font-mono text-sm text-muted-foreground hover:text-foreground underline transition-colors"
-                    >
-                      v0prompttoproduction.vercel.app/submit &rarr;
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-5">
-                  <div className="size-10 rounded-full bg-foreground text-background flex items-center justify-center shrink-0">
-                    <span className="font-mono font-semibold">2</span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg">
-                      Submit to community vote
-                    </h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      The Lima community votes on best projects.
-                    </p>
-                    <a
-                      href="https://v0.crafter.run/internal"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block mt-2 font-mono text-sm text-muted-foreground hover:text-foreground underline transition-colors"
-                    >
-                      v0.crafter.run/internal &rarr;
-                    </a>
-                  </div>
-                </div>
-              </AnimatedGroup>
-              <p className="mt-8 text-muted-foreground/60 font-mono text-sm">
-                Submit to both for maximum visibility.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Slide 10: Thanks */}
-        {currentSlide === 9 && (
+        {/* Slide 11: Thanks */}
+        {currentSlide === 10 && (
           <div className={slideClasses} key={`thanks-${slideKey}`}>
             <div className="max-w-4xl text-center relative z-10">
               <TextEffect
                 preset="fade-in-blur"
                 speedSegment={0.3}
                 as="h2"
-                className="text-balance text-5xl md:text-7xl lg:text-8xl font-medium leading-tight"
+                className="text-balance text-5xl md:text-7xl lg:text-8xl font-medium leading-tight tracking-tight"
               >
                 Thanks for building
               </TextEffect>
@@ -760,17 +1053,17 @@ export function EventDeck() {
                 per="line"
                 preset="fade-in-blur"
                 speedSegment={0.3}
-                delay={0.4}
+                delay={0.3}
                 as="p"
-                className="mt-4 text-xl text-muted-foreground"
+                className="mt-4 text-lg md:text-xl text-muted-foreground"
               >
-                Group photo time!
+                92 builders. 52 projects. 4 cities. 1 day.
               </TextEffect>
               <AnimatedGroup
                 variants={{
                   container: {
                     visible: {
-                      transition: { staggerChildren: 0.05, delayChildren: 0.75 },
+                      transition: { staggerChildren: 0.05, delayChildren: 0.6 },
                     },
                   },
                   ...transitionVariants,
@@ -781,6 +1074,7 @@ export function EventDeck() {
                   href="https://github.com/crafter-station"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className="inline-flex items-center gap-2.5 px-5 py-3 bg-foreground text-background font-medium rounded-lg hover:bg-foreground/90 transition-colors text-sm"
                 >
                   <svg className="size-4" fill="currentColor" viewBox="0 0 24 24">
@@ -796,6 +1090,7 @@ export function EventDeck() {
                   href="https://x.com/CrafterStation"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className="inline-flex items-center gap-2.5 px-5 py-3 border border-border text-foreground font-medium rounded-lg hover:border-foreground/30 transition-colors text-sm"
                 >
                   <svg className="size-4" fill="currentColor" viewBox="0 0 24 24">
@@ -804,12 +1099,13 @@ export function EventDeck() {
                   X / Twitter
                 </a>
                 <a
-                  href="https://v0.crafter.run"
+                  href="https://devshots.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                   className="inline-flex items-center gap-2.5 px-5 py-3 border border-border text-foreground font-medium rounded-lg hover:border-foreground/30 transition-colors text-sm font-mono"
                 >
-                  v0.crafter.run
+                  Event Photos
                 </a>
               </AnimatedGroup>
               <div className="mt-12 pt-6 border-t border-dashed">
